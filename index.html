@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Констелляция Чувств • Для Лизы</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0d0814;
+            color: #f3e8ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-serif-romantic { font-family: 'Cormorant Garamond', serif; }
+        .font-handwriting { font-family: 'Caveat', cursive; }
+
+        .cosmic-glass {
+            background: rgba(23, 15, 38, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(236, 72, 153, 0.25);
+            box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(236, 72, 153, 0.15);
+        }
+
+        .cosmic-card {
+            background: rgba(20, 14, 32, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            box-shadow: 0 20px 45px -10px rgba(168, 85, 247, 0.3);
+        }
+
+        .cosmic-btn {
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #6366f1 100%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cosmic-btn:hover {
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.7), 0 0 15px rgba(168, 85, 247, 0.8);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .cosmic-btn:active { transform: translateY(1px) scale(0.98); }
+
+        .key-glow-active {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.4), rgba(168, 85, 247, 0.4)) !important;
+            border-color: #f472b6 !important;
+            box-shadow: 0 0 25px rgba(244, 114, 182, 0.8), inset 0 0 15px rgba(251, 207, 232, 0.5) !important;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1.5deg); }
+        }
+
+        .gentle-float { animation: gentleFloat 5s ease-in-out infinite; }
+
+        @keyframes letterReveal {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .letter-reveal { animation: letterReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0d0814; }
+        ::-webkit-scrollbar-thumb { background: #ec4899; border-radius: 3px; }
+
+        canvas { touch-action: none; }
+    </style>
+</head>
+<body class="relative flex flex-col justify-between items-center min-h-screen pb-6 selection:bg-pink-500 selection:text-white">
+
+    <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Header & Navigation -->
+    <header class="relative z-10 w-full max-w-5xl px-4 pt-6 pb-2 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-500 via-purple-500 to-indigo-500 p-0.5 shadow-lg flex items-center justify-center">
+                <div class="w-full h-full bg-slate-950/90 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-sparkles text-pink-400 text-xl gentle-float"></i>
+                </div>
+            </div>
+            <div>
+                <h1 class="text-2xl md:text-3xl font-serif-romantic font-semibold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-pink-200 via-purple-200 to-indigo-100">
+                    Констелляция Чувств
+                </h1>
+                <p class="text-xs font-light tracking-widest text-pink-300/70 uppercase">Посвящается Лизе ✨</p>
+            </div>
+        </div>
+
+        <nav class="flex items-center gap-1.5 p-1.5 rounded-full cosmic-glass overflow-x-auto max-w-full">
+            <button onclick="switchTab('jar')" id="tab-jar" class="px-3.5 py-2 rounded-full text-xs md:text-sm font-medium transition-all bg-pink-500/80 text-white shadow-lg whitespace-nowrap">
+                <i class="fa-solid fa-jar mr-1.5 text-pink-200"></i>Баночка Чувств
+            </button>
+            <button onclick="switchTab('keys')" id="tab-keys" class="px-3.5 py-2 rounded-full text-xs md:text-sm font-medium transition-all text-purple-200/70 hover:text-pink-300 whitespace-nowrap">
+                <i class="fa-solid fa-key mr-1.5 text-pink-400"></i>Ключи
+            </button>
+            <button onclick="switchTab('sky')" id="tab-sky" class="px-3.5 py-2 rounded-full text-xs md:text-sm font-medium transition-all text-purple-200/70 hover:text-pink-300 whitespace-nowrap">
+                <i class="fa-solid fa-star mr-1.5 text-pink-400"></i>Звёздная Река
+            </button>
+            <button onclick="switchTab('card')" id="tab-card" class="px-3.5 py-2 rounded-full text-xs md:text-sm font-medium transition-all text-purple-200/70 hover:text-pink-300 whitespace-nowrap">
+                <i class="fa-solid fa-envelope-open-text mr-1.5 text-pink-400"></i>Для Лизы
+            </button>
+        </nav>
+    </header>
+
+    <main class="relative z-10 w-full max-w-5xl px-4 py-4 flex-1 flex flex-col justify-center">
+
+        <!-- TAB 1: JAR -->
+        <section id="sec-jar" class="w-full flex flex-col items-center">
+            <div class="text-center mb-4 max-w-lg">
+                <h2 class="text-2xl font-serif-romantic font-semibold text-pink-100 mb-1">Баночка Нежных Записок</h2>
+                <p class="text-xs text-pink-300/70">Кликай по сердечкам внутри волшебного сосуда, чтобы прочесть признания.</p>
+                <div class="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-950/50 border border-pink-500/30 text-xs text-pink-300">
+                    <i class="fa-solid fa-heart text-pink-400"></i>
+                    <span id="jar-counter">Прочитано: 0 из 8</span>
+                </div>
+            </div>
+
+            <div class="relative w-full max-w-md h-[400px] cosmic-card rounded-3xl p-6 border border-pink-500/30 flex items-center justify-center overflow-hidden shadow-2xl">
+                <div class="absolute top-4 inset-x-1/4 h-8 bg-gradient-to-r from-amber-200/20 via-pink-300/30 to-amber-200/20 rounded-full border border-pink-300/40 shadow-inner"></div>
+                <div id="jar-hearts-container" class="relative w-full h-full pt-10"></div>
+            </div>
+        </section>
+
+        <!-- TAB 2: KEYS -->
+        <section id="sec-keys" class="hidden w-full max-w-2xl mx-auto flex flex-col items-center">
+            <div id="keys-main-content" class="w-full flex flex-col items-center">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-serif-romantic font-semibold text-pink-100 mb-1">Три Ключа к Твоему Сердцу</h2>
+                    <p class="text-xs text-pink-300/70 max-w-md">Лиза, у меня есть три ключа — и все они подходят к твоему сердцу. Нажми на каждый, чтобы открыть то, что я хочу тебе сказать.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mb-8">
+                    <button onclick="toggleKey(1)" id="key-1" class="cosmic-glass p-5 rounded-2xl flex flex-col items-center gap-3 transition-all border border-pink-500/30 hover:border-pink-400">
+                        <div class="w-12 h-12 rounded-full bg-pink-950/60 border border-pink-400/40 flex items-center justify-center text-pink-300 text-xl">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <span class="text-xs font-medium text-pink-200 text-center">Ключ Глаз</span>
+                        <span class="text-[10px] text-pink-300/50 text-center leading-tight">В твоих глазах я вижу целый мир — и хочу в нём остаться</span>
+                        <i id="key-check-1" class="fa-regular fa-circle text-pink-400/50 text-sm"></i>
+                    </button>
+
+                    <button onclick="toggleKey(2)" id="key-2" class="cosmic-glass p-5 rounded-2xl flex flex-col items-center gap-3 transition-all border border-pink-500/30 hover:border-pink-400">
+                        <div class="w-12 h-12 rounded-full bg-pink-950/60 border border-pink-400/40 flex items-center justify-center text-pink-300 text-xl">
+                            <i class="fa-solid fa-face-smile"></i>
+                        </div>
+                        <span class="text-xs font-medium text-pink-200 text-center">Ключ Улыбки</span>
+                        <span class="text-[10px] text-pink-300/50 text-center leading-tight">Твоя улыбка — мой самый любимый звук на свете</span>
+                        <i id="key-check-2" class="fa-regular fa-circle text-pink-400/50 text-sm"></i>
+                    </button>
+
+                    <button onclick="toggleKey(3)" id="key-3" class="cosmic-glass p-5 rounded-2xl flex flex-col items-center gap-3 transition-all border border-pink-500/30 hover:border-pink-400">
+                        <div class="w-12 h-12 rounded-full bg-pink-950/60 border border-pink-400/40 flex items-center justify-center text-pink-300 text-xl">
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+                        </div>
+                        <span class="text-xs font-medium text-pink-200 text-center">Ключ Тепла</span>
+                        <span class="text-[10px] text-pink-300/50 text-center leading-tight">В твоих объятиях всегда уютно и спокойно</span>
+                        <i id="key-check-3" class="fa-regular fa-circle text-pink-400/50 text-sm"></i>
+                    </button>
+                </div>
+
+                <div id="lock-box" class="w-full cosmic-card rounded-3xl p-8 border border-pink-500/30 flex flex-col items-center text-center opacity-60 transition-all duration-500">
+                    <div id="lock-icon-container" class="w-16 h-16 rounded-full bg-pink-950/80 border-2 border-pink-500/40 flex items-center justify-center text-2xl text-pink-400 mb-4 shadow-lg">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 id="lock-status-title" class="text-lg font-serif-romantic text-pink-200 mb-2">Сердце закрыто</h3>
+                    <p id="lock-status-desc" class="text-xs text-pink-300/60 max-w-sm mb-4">Поверни все три ключа — и ты узнаешь, что я берегу для тебя.</p>
+                    <button id="unlock-btn" disabled onclick="openUnlockedLetter()" class="px-6 py-2.5 rounded-full bg-pink-950 text-pink-400/50 text-xs font-medium border border-pink-500/20 cursor-not-allowed transition">
+                        Открыть послание
+                    </button>
+                </div>
+            </div>
+
+            <!-- Письмо открывается прямо на этой вкладке -->
+            <div id="keys-letter" class="hidden w-full cosmic-card rounded-3xl p-6 sm:p-10 border border-pink-500/40 shadow-2xl relative mt-2">
+                <div class="absolute top-4 left-4 text-pink-400/30 text-xl"><i class="fa-solid fa-heart"></i></div>
+                <div class="absolute top-4 right-4 text-pink-400/30 text-xl"><i class="fa-solid fa-sparkles"></i></div>
+
+                <div class="text-center mb-6">
+                    <span class="px-3 py-1 rounded-full bg-pink-950/80 border border-pink-500/30 text-[11px] text-pink-300 uppercase tracking-widest">
+                        Послание открыто
+                    </span>
+                    <h2 class="text-3xl font-serif-romantic font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-200 via-rose-200 to-purple-200 mt-3">
+                        То, что я берегу для тебя
+                    </h2>
+                </div>
+
+                <div class="space-y-4 font-handwriting text-2xl text-pink-100/90 leading-relaxed border-y border-pink-500/20 py-6 my-4">
+                    <p>Лиза, эти три ключа — не просто слова. Это то, что я вижу в тебе каждый день и за что благодарю судьбу.</p>
+                    <p>Твои глаза — это отдельная вселенная: в них можно утонуть и не захотеть возвращаться. Твоя улыбка — это звук, который я узнаю из тысячи и который делает любой день светлее, даже самый серый.</p>
+                    <p>А твои объятия — это то место, где время замедляется. Когда ты обнимаешь, весь шум мира куда-то исчезает, остаётся только тепло, спокойствие и чувство, что я наконец дома. В твоих руках можно выдохнуть и просто быть собой — без масок, без спешки, без страха.</p>
+                    <p>Спасибо, что ты есть. Я берегу эти ключи, эти объятия и тебя. 💕</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                    <div class="text-xs font-serif-romantic italic text-pink-300/70">
+                        С нежностью, твой ✨
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="closeKeysLetter()" class="px-5 py-2.5 rounded-full bg-pink-950/60 text-pink-300 text-xs font-medium border border-pink-500/30 hover:bg-pink-900/60 transition flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Назад
+                        </button>
+                        <button onclick="copyKeysLetterText()" class="cosmic-btn px-5 py-2.5 rounded-full text-xs font-semibold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-copy"></i> Скопировать
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: SKY -->
+        <section id="sec-sky" class="hidden w-full max-w-3xl mx-auto flex flex-col items-center">
+            <div class="text-center mb-3">
+                <h2 class="text-2xl font-serif-romantic font-semibold text-pink-100 mb-1">Звёздное Небо Чувств</h2>
+                <p class="text-xs text-pink-300/70">Нажми «Зажечь небо» — и звёзды сложатся в слова, которые я хочу тебе сказать.</p>
+            </div>
+
+            <div class="mb-4 flex items-center justify-center">
+                <button onclick="triggerStarConstellation()" class="cosmic-btn px-6 py-2.5 rounded-full text-xs font-semibold text-white tracking-widest uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Зажечь небо
+                </button>
+            </div>
+
+            <div class="relative w-full h-96 rounded-3xl cosmic-card border border-pink-500/30 overflow-hidden shadow-2xl">
+                <canvas id="sky-canvas" class="w-full h-full block cursor-crosshair"></canvas>
+            </div>
+        </section>
+
+        <!-- TAB 4: CARD -->
+        <section id="sec-card" class="hidden w-full max-w-2xl mx-auto flex flex-col items-center">
+            <div class="w-full cosmic-card rounded-3xl p-6 sm:p-10 border border-pink-500/40 shadow-2xl relative">
+                <div class="absolute top-4 left-4 text-pink-400/30 text-xl"><i class="fa-solid fa-heart"></i></div>
+                <div class="absolute top-4 right-4 text-pink-400/30 text-xl"><i class="fa-solid fa-sparkles"></i></div>
+
+                <div class="text-center mb-6">
+                    <span class="px-3 py-1 rounded-full bg-pink-950/80 border border-pink-500/30 text-[11px] text-pink-300 uppercase tracking-widest">
+                        Письмо, которое всегда с тобой
+                    </span>
+                    <h2 class="text-3xl font-serif-romantic font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-200 via-rose-200 to-purple-200 mt-3">
+                        Лиза, это для тебя
+                    </h2>
+                </div>
+
+                <div class="space-y-4 font-handwriting text-2xl text-pink-100/90 leading-relaxed border-y border-pink-500/20 py-6 my-4">
+                    <p>Лиза, я не знаю, как сказать это красивее, но попробую: ты — та редкая причина, по которой обычный вторник вдруг становится праздником. С тобой даже дождь за окном звучит как музыка.</p>
+                    <p>Мне нравится в тебе всё: как ты смеёшься над моими глупыми шутками, как задумываешься над мелочами, как заботишься о людях, даже когда устала. Ты делаешь мир мягче просто тем, что в нём есть.</p>
+                    <p>А ещё я очень люблю твои объятия. В них как будто выключается весь лишний шум — остаётся только тепло, твоё дыхание рядом и чувство, что всё правильно. Обнимать тебя — это моё тихое счастье, к которому хочется возвращаться снова и снова.</p>
+                    <p>Спасибо, что ты рядом. Береги себя — а я буду беречь тебя. 💕</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                    <div class="text-xs font-serif-romantic italic text-pink-300/70">
+                        С нежностью, твой ✨
+                    </div>
+                    <button onclick="copyLetterText()" class="cosmic-btn px-5 py-2.5 rounded-full text-xs font-semibold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-copy"></i> Скопировать текст
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal -->
+    <div id="note-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="relative w-full max-w-sm cosmic-card rounded-3xl p-6 border border-pink-400/50 shadow-2xl text-center">
+            <div class="w-12 h-12 rounded-full bg-pink-950/80 border border-pink-400/50 mx-auto flex items-center justify-center text-pink-400 text-xl mb-3">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <h4 class="text-sm font-serif-romantic text-pink-300 uppercase tracking-wider mb-2">Записка из банки</h4>
+            <p id="note-modal-text" class="font-handwriting text-2xl text-pink-100 py-3 leading-snug"></p>
+            <button onclick="closeNoteModal()" class="mt-4 px-6 py-2 rounded-full bg-pink-500/30 text-pink-200 text-xs font-medium hover:bg-pink-500/50 transition">
+                Закрыть
+            </button>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-6 z-50 px-5 py-2.5 rounded-full cosmic-glass border border-pink-400/50 text-xs text-pink-200 shadow-xl opacity-0 transition-opacity pointer-events-none">
+        Текст скопирован в буфер обмена! 💖
+    </div>
+
+    <script>
+        // --- AUDIO ---
+        let audioCtx = null;
+        let isAudioPlaying = false;
+        let masterGain = null;
+        let ambientTimer = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                masterGain = audioCtx.createGain();
+                masterGain.gain.value = 0.12;
+                masterGain.connect(audioCtx.destination);
+            }
+        }
+
+        function playSoftMusicBox() {
+            if (!audioCtx || !isAudioPlaying) return;
+            const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99];
+            const freq = notes[Math.floor(Math.random() * notes.length)];
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2.5);
+                osc.connect(gain);
+                gain.connect(masterGain);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 2.6);
+            } catch(e) {}
+        }
+
+        function toggleAmbientSound() {
+            initAudio();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            isAudioPlaying = !isAudioPlaying;
+            const icon = document.getElementById('sound-icon');
+            const btn = document.getElementById('sound-toggle-btn');
+            if (isAudioPlaying) {
+                icon.className = "fa-solid fa-volume-high text-lg";
+                btn.classList.add('ring-2', 'ring-pink-400');
+                playSoftMusicBox();
+                ambientTimer = setInterval(playSoftMusicBox, 1800);
+            } else {
+                icon.className = "fa-solid fa-volume-xmark text-lg";
+                btn.classList.remove('ring-2', 'ring-pink-400');
+                if (ambientTimer) clearInterval(ambientTimer);
+            }
+        }
+
+        function playSparkleSound() {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1174.66, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+                osc.connect(gain);
+                gain.connect(masterGain);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } catch(e) {}
+        }
+
+        // --- TAB 1: JAR ---
+        const jarNotes = [
+            "Лиза, твоя улыбка делает этот мир светлее! ✨",
+            "С тобой каждый момент особенный и неповторимый. 💖",
+            "Твой голос — моя самая любимая мелодия. 🎶",
+            "Обожаю твое невероятное чувство юмора! 😄",
+            "Рядом с тобой всегда легко и уютно. 🌸",
+            "Ты вдохновляешь меня быть лучше каждый день. 🌟",
+            "Твоя забота и тепло согревают даже в холод. ☕",
+            "Спасибо тебе за то, что ты есть, Лиза! 💕"
+        ];
+        let readNotesCount = 0;
+
+        function renderJarHearts() {
+            const container = document.getElementById('jar-hearts-container');
+            container.innerHTML = '';
+            jarNotes.forEach((text, i) => {
+                const heart = document.createElement('div');
+                heart.className = "absolute cursor-pointer transform hover:scale-125 transition-transform duration-300 flex items-center justify-center";
+                const x = 15 + (i % 3) * 30 + (Math.random() * 8 - 4);
+                const y = 15 + Math.floor(i / 3) * 25 + (Math.random() * 8 - 4);
+                heart.style.left = `${x}%`;
+                heart.style.top = `${y}%`;
+                heart.style.animation = `gentleFloat ${4 + (i % 3)}s ease-in-out infinite ${i * 0.4}s`;
+                heart.innerHTML = `
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-600 to-rose-400 border border-pink-300/60 shadow-lg flex items-center justify-center text-white text-lg hover:shadow-pink-500/50">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                `;
+                heart.onclick = () => {
+                    initAudio();
+                    playSparkleSound();
+                    document.getElementById('note-modal-text').innerText = text;
+                    document.getElementById('note-modal').classList.remove('hidden');
+                    if (!heart.dataset.read) {
+                        heart.dataset.read = "true";
+                        readNotesCount++;
+                        document.getElementById('jar-counter').innerText = `Прочитано: ${readNotesCount} из ${jarNotes.length}`;
+                    }
+                };
+                container.appendChild(heart);
+            });
+        }
+
+        function closeNoteModal() {
+            document.getElementById('note-modal').classList.add('hidden');
+        }
+
+        // --- TAB 2: KEYS ---
+        const activeKeys = { 1: false, 2: false, 3: false };
+
+        function toggleKey(id) {
+            initAudio();
+            playSparkleSound();
+            activeKeys[id] = !activeKeys[id];
+            const btn = document.getElementById(`key-${id}`);
+            const check = document.getElementById(`key-check-${id}`);
+            if (activeKeys[id]) {
+                btn.classList.add('key-glow-active');
+                check.className = "fa-solid fa-circle-check text-pink-300 text-sm";
+            } else {
+                btn.classList.remove('key-glow-active');
+                check.className = "fa-regular fa-circle text-pink-400/50 text-sm";
+            }
+            if (activeKeys[1] && activeKeys[2] && activeKeys[3]) {
+                const lockBox = document.getElementById('lock-box');
+                lockBox.classList.remove('opacity-60');
+                lockBox.classList.add('ring-2', 'ring-pink-400', 'shadow-pink-500/30');
+                document.getElementById('lock-icon-container').innerHTML = '<i class="fa-solid fa-lock-open text-pink-300"></i>';
+                document.getElementById('lock-status-title').innerText = "Сердце открыто!";
+                document.getElementById('lock-status-desc').innerText = "Все три ключа повернулись. Теперь ты можешь прочитать моё послание для тебя.";
+                const unlockBtn = document.getElementById('unlock-btn');
+                unlockBtn.disabled = false;
+                unlockBtn.className = "cosmic-btn px-6 py-2.5 rounded-full text-white text-xs font-semibold cursor-pointer shadow-lg";
+            }
+        }
+
+        function openUnlockedLetter() {
+            initAudio();
+            playSparkleSound();
+            document.getElementById('keys-main-content').classList.add('hidden');
+            const letter = document.getElementById('keys-letter');
+            letter.classList.remove('hidden');
+            letter.classList.add('letter-reveal');
+        }
+
+        function closeKeysLetter() {
+            const letter = document.getElementById('keys-letter');
+            letter.classList.add('hidden');
+            letter.classList.remove('letter-reveal');
+            document.getElementById('keys-main-content').classList.remove('hidden');
+        }
+
+        function copyKeysLetterText() {
+            const text = `Лиза, эти три ключа — не просто слова. Это то, что я вижу в тебе каждый день и за что благодарю судьбу.\n\nТвои глаза — это отдельная вселенная: в них можно утонуть и не захотеть возвращаться. Твоя улыбка — это звук, который я узнаю из тысячи и который делает любой день светлее, даже самый серый.\n\nА твои объятия — это то место, где время замедляется. Когда ты обнимаешь, весь шум мира куда-то исчезает, остаётся только тепло, спокойствие и чувство, что я наконец дома. В твоих руках можно выдохнуть и просто быть собой — без масок, без спешки, без страха.\n\nСпасибо, что ты есть. Я берегу эти ключи, эти объятия и тебя. 💕`;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            const toast = document.getElementById('toast');
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 2500);
+            playSparkleSound();
+        }
+
+        // --- TAB 3: SKY ---
+        const skyCanvas = document.getElementById('sky-canvas');
+        const skyCtx = skyCanvas.getContext('2d');
+        let userLines = [];
+        let constellationSegments = [];
+        let constellationStars = [];
+        let isDrawing = false;
+        let skyInitialized = false;
+
+        function initSkyCanvas() {
+            if (skyInitialized) return;
+            const rect = skyCanvas.parentElement.getBoundingClientRect();
+            if (rect.width === 0) { setTimeout(initSkyCanvas, 100); return; }
+            skyCanvas.width = rect.width;
+            skyCanvas.height = rect.height;
+            skyInitialized = true;
+
+            function getCoords(e) {
+                const cRect = skyCanvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - cRect.left, y: clientY - cRect.top };
+            }
+            function startDraw(e) {
+                isDrawing = true;
+                const pos = getCoords(e);
+                userLines.push([{ x: pos.x, y: pos.y }]);
+            }
+            function moveDraw(e) {
+                if (!isDrawing) return;
+                const pos = getCoords(e);
+                const currentStroke = userLines[userLines.length - 1];
+                if (currentStroke) currentStroke.push({ x: pos.x, y: pos.y });
+            }
+            function endDraw() { isDrawing = false; }
+
+            skyCanvas.addEventListener('mousedown', startDraw);
+            skyCanvas.addEventListener('mousemove', moveDraw);
+            skyCanvas.addEventListener('mouseup', endDraw);
+            skyCanvas.addEventListener('touchstart', startDraw);
+            skyCanvas.addEventListener('touchmove', moveDraw);
+            skyCanvas.addEventListener('touchend', endDraw);
+
+            function renderSky() {
+                skyCtx.clearRect(0, 0, skyCanvas.width, skyCanvas.height);
+
+                for (let i = 0; i < 40; i++) {
+                    const a = Math.sin(Date.now() * 0.002 + i) * 0.3 + 0.5;
+                    skyCtx.fillStyle = `rgba(255, 255, 255, ${a})`;
+                    skyCtx.beginPath();
+                    skyCtx.arc((i * 73) % skyCanvas.width, (i * 41) % skyCanvas.height, (i % 2) + 1, 0, Math.PI * 2);
+                    skyCtx.fill();
+                }
+
+                userLines.forEach(stroke => {
+                    if (stroke.length < 2) return;
+                    skyCtx.strokeStyle = 'rgba(244, 114, 182, 0.7)';
+                    skyCtx.lineWidth = 2;
+                    skyCtx.beginPath();
+                    skyCtx.moveTo(stroke[0].x, stroke[0].y);
+                    for (let i = 1; i < stroke.length; i++) skyCtx.lineTo(stroke[i].x, stroke[i].y);
+                    skyCtx.stroke();
+                });
+
+                skyCtx.strokeStyle = 'rgba(168, 85, 247, 0.4)';
+                skyCtx.lineWidth = 1.2;
+                constellationSegments.forEach(([a, b]) => {
+                    skyCtx.beginPath();
+                    skyCtx.moveTo(a.x, a.y);
+                    skyCtx.lineTo(b.x, b.y);
+                    skyCtx.stroke();
+                });
+
+                const pulse = Math.sin(Date.now() * 0.003) * 0.3 + 0.7;
+                constellationStars.forEach((star, i) => {
+                    const glowRadius = 8 + Math.sin(Date.now() * 0.002 + i) * 3;
+                    const glowGrad = skyCtx.createRadialGradient(star.x, star.y, 1, star.x, star.y, glowRadius);
+                    glowGrad.addColorStop(0, `rgba(251, 207, 232, ${0.9 * pulse})`);
+                    glowGrad.addColorStop(0.5, `rgba(236, 72, 153, ${0.4 * pulse})`);
+                    glowGrad.addColorStop(1, 'rgba(244, 114, 182, 0.0)');
+                    skyCtx.fillStyle = glowGrad;
+                    skyCtx.beginPath();
+                    skyCtx.arc(star.x, star.y, glowRadius, 0, Math.PI * 2);
+                    skyCtx.fill();
+
+                    skyCtx.fillStyle = '#ffffff';
+                    skyCtx.beginPath();
+                    skyCtx.arc(star.x, star.y, 2.2, 0, Math.PI * 2);
+                    skyCtx.fill();
+                });
+
+                requestAnimationFrame(renderSky);
+            }
+            renderSky();
+        }
+
+        function triggerStarConstellation() {
+            initAudio();
+            playSparkleSound();
+            userLines = [];
+            constellationSegments = [];
+            constellationStars = [];
+
+            if (!skyInitialized) {
+                initSkyCanvas();
+                setTimeout(triggerStarConstellation, 150);
+                return;
+            }
+
+            const text = "i love you baby";
+
+            const fontCanvas = document.createElement('canvas');
+            fontCanvas.width = skyCanvas.width;
+            fontCanvas.height = skyCanvas.height;
+            const fctx = fontCanvas.getContext('2d');
+
+            const padding = 20;
+            let fontSize = Math.min(skyCanvas.height * 0.42, skyCanvas.width * 0.2);
+            fctx.font = `bold ${fontSize}px Montserrat, Arial, sans-serif`;
+            let textWidth = fctx.measureText(text).width;
+            const maxWidth = skyCanvas.width - padding * 2;
+
+            if (textWidth > maxWidth) {
+                fontSize = Math.floor(fontSize * (maxWidth / textWidth));
+            }
+
+            fctx.fillStyle = '#ffffff';
+            fctx.font = `bold ${fontSize}px Montserrat, Arial, sans-serif`;
+            fctx.textAlign = 'center';
+            fctx.textBaseline = 'middle';
+            fctx.fillText(text, skyCanvas.width / 2, skyCanvas.height / 2);
+
+            const imgData = fctx.getImageData(0, 0, skyCanvas.width, skyCanvas.height);
+            const data = imgData.data;
+            const W = skyCanvas.width;
+            const H = skyCanvas.height;
+
+            const isOpaque = (x, y) => {
+                if (x < 0 || y < 0 || x >= W || y >= H) return false;
+                return data[(y * W + x) * 4 + 3] > 128;
+            };
+
+            const step = Math.max(4, Math.floor(fontSize / 14));
+            const candidates = [];
+            for (let y = 0; y < H; y += step) {
+                for (let x = 0; x < W; x += step) {
+                    if (!isOpaque(x, y)) continue;
+                    const edge =
+                        !isOpaque(x - step, y) || !isOpaque(x + step, y) ||
+                        !isOpaque(x, y - step) || !isOpaque(x, y + step);
+                    if (edge) candidates.push({ x, y });
+                }
+            }
+
+            const MIN_DIST = Math.max(8, Math.floor(fontSize / 9));
+            candidates.forEach(p => {
+                const tooClose = constellationStars.some(s => {
+                    const dx = s.x - p.x, dy = s.y - p.y;
+                    return dx * dx + dy * dy < MIN_DIST * MIN_DIST;
+                });
+                if (!tooClose) constellationStars.push(p);
+            });
+
+            const MAX_EDGE = MIN_DIST * 1.8;
+            const used = new Set();
+            constellationStars.forEach((s, i) => {
+                const neighbors = constellationStars
+                    .map((t, j) => ({ t, j, d: (t.x - s.x) ** 2 + (t.y - s.y) ** 2 }))
+                    .filter(o => o.j !== i && o.d < MAX_EDGE * MAX_EDGE)
+                    .sort((a, b) => a.d - b.d)
+                    .slice(0, 2);
+                neighbors.forEach(({ t, j }) => {
+                    const key = i < j ? `${i}-${j}` : `${j}-${i}`;
+                    if (used.has(key)) return;
+                    used.add(key);
+                    constellationSegments.push([s, t]);
+                });
+            });
+        }
+
+        // --- TAB 4: CARD ---
+        function copyLetterText() {
+            const text = `Лиза, я не знаю, как сказать это красивее, но попробую: ты — та редкая причина, по которой обычный вторник вдруг становится праздником. С тобой даже дождь за окном звучит как музыка.\n\nМне нравится в тебе всё: как ты смеёшься над моими глупыми шутками, как задумываешься над мелочами, как заботишься о людях, даже когда устала. Ты делаешь мир мягче просто тем, что в нём есть.\n\nА ещё я очень люблю твои объятия. В них как будто выключается весь лишний шум — остаётся только тепло, твоё дыхание рядом и чувство, что всё правильно. Обнимать тебя — это моё тихое счастье, к которому хочется возвращаться снова и снова.\n\nСпасибо, что ты рядом. Береги себя — а я буду беречь тебя. 💕`;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            const toast = document.getElementById('toast');
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 2500);
+            playSparkleSound();
+        }
+
+        // --- BACKGROUND ---
+        function initBackgroundCanvas() {
+            const bgCanvas = document.getElementById('bg-canvas');
+            const bgCtx = bgCanvas.getContext('2d');
+            function resize() {
+                bgCanvas.width = window.innerWidth;
+                bgCanvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const bgParticles = [];
+            for (let i = 0; i < 45; i++) {
+                bgParticles.push({
+                    x: Math.random() * bgCanvas.width,
+                    y: Math.random() * bgCanvas.height,
+                    radius: Math.random() * 2 + 0.5,
+                    alpha: Math.random() * 0.6 + 0.2,
+                    speedY: -Math.random() * 0.4 - 0.1
+                });
+            }
+            function renderBg() {
+                bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+                bgParticles.forEach(p => {
+                    p.y += p.speedY;
+                    if (p.y < 0) p.y = bgCanvas.height;
+                    bgCtx.fillStyle = `rgba(244, 114, 182, ${p.alpha})`;
+                    bgCtx.beginPath();
+                    bgCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    bgCtx.fill();
+                });
+                requestAnimationFrame(renderBg);
+            }
+            renderBg();
+        }
+
+        // --- TAB SWITCHER ---
+        function switchTab(tab) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`sec-${tab}`).classList.remove('hidden');
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.className = "px-3.5 py-2 rounded-full text-xs md:text-sm font-medium transition-all text-purple-200/70 hover:text-pink-300 whitespace-nowrap";
+            });
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            activeBtn.className = "px-3.5 py-2 rounded-full text-xs md:text-sm font-medium transition-all bg-pink-500/80 text-white shadow-lg whitespace-nowrap";
+            if (tab === 'sky') setTimeout(initSkyCanvas, 50);
+            if (tab === 'jar') setTimeout(renderJarHearts, 50);
+            if (tab === 'keys') {
+                document.getElementById('keys-main-content').classList.remove('hidden');
+                document.getElementById('keys-letter').classList.add('hidden');
+                document.getElementById('keys-letter').classList.remove('letter-reveal');
+            }
+        }
+
+        window.onload = function() {
+            initBackgroundCanvas();
+            renderJarHearts();
+        };
+    </script>
+</body>
+</html>
